@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Sade GPT ekran</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial}
+    html,body{height:100%;background:#f3f6fb;}
+
+    .chat-wrap{
+      width:420px;
+      max-width:calc(100% - 32px);
+      height:640px;
+      margin:26px auto;
+      background:linear-gradient(180deg,#ffffff 0%,#fbfdff 100%);
+      border-radius:20px;
+      box-shadow:0 12px 30px rgba(17,24,39,0.12);
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
+      border:1px solid rgba(15,23,42,0.24);
+    }
+    .chat-header{
+      padding:16px 18px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      border-bottom:1px solid rgba(15,23,42,0.24);
+      background:transparent;
+    }
+    .avatar{
+      width:44px;height:44px;
+      border-radius:12px;
+      background:linear-gradient(135deg,#7c3aed,#06b6d4);
+      display:flex;align-items:center;justify-content:center;
+      color:#fff;font-weight:700;font-size:18px;
+      box-shadow:0 6px 18px rgba(99,102,241,0.12);
+    }
+    .title{font-weight:600;color:#0f172a}
+    .subtitle{font-size:12px;color:#64748b}
+
+    .messages{
+      padding:20px 18px;
+      flex:1;overflow:auto;
+      display:flex;flex-direction:column;gap:12px;
+      background-image:radial-gradient(circle at 10% 10%,rgba(99,102,241,0.02) 0px,transparent 40px);
+    }
+    .msg{
+      max-width:78%;padding:10px 14px;border-radius:14px;
+      line-height:1.35;font-size:14px;
+      word-wrap:break-word;
+      box-shadow:0 6px 18px rgba(2,6,23,0.03);
+    }
+    .user{align-self:flex-end;background:#0ea5a2;color:#fff;border-bottom-right-radius:6px;}
+    .bot{align-self:flex-start;background:#f1f5f9;color:#0f172a;border-bottom-left-radius:6px;}
+    .meta{font-size:11px;color:#94a3b8;margin-top:6px;}
+
+    .composer{
+      padding:12px;display:flex;gap:10px;align-items:center;
+      border-top:1px solid rgba(15,23,42,0.04);
+      background:linear-gradient(180deg,rgba(250,250,250,0.08),rgba(255,255,255,0.9));
+    }
+    .input{
+      flex:1;display:flex;align-items:center;
+      background:#f8fafc;padding:10px 12px;border-radius:999px;gap:8px;
+      border:1px solid rgba(2,6,23,0.03);
+    }
+    .input input{
+      border:0;background:transparent;outline:none;
+      font-size:14px;color:#0f172a;width:100%;
+    }
+    .btn-send{
+      width:48px;height:48px;border-radius:50%;
+      display:grid;place-items:center;
+      border:0;
+      background:linear-gradient(135deg,#6366f1,#06b6d4);
+      cursor:pointer;color:#fff;font-weight:600;
+      transition:transform .12s ease;
+    }
+    .btn-send:active{transform:translateY(2px) scale(.98);}
+    .floating-note{
+      position:absolute;right:22px;bottom:22px;background:#fff;
+      padding:8px 12px;border-radius:999px;
+      box-shadow:0 10px 30px rgba(2,6,23,0.06);
+      font-size:13px;color:#0f172a;
+      border:1px solid rgba(15,23,42,0.04);
+    }
+    @media(max-width:480px){
+      .chat-wrap{height:88vh;border-radius:16px;margin:18px;}
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-wrap" role="region" aria-label="Sade gpt ekran">
+    <div class="chat-header">
+      <div class="avatar">AI</div>
+      <div>
+        <div class="title">Sade ai</div>
+        <div class="subtitle">yaz: cavab gələcək</div>
+      </div>
+    </div>
+
+    <div class="messages" id="messages">
+      <div class="msg bot">
+        Salam, necə kömək edə bilərəm?
+        <div class="meta">GPT • indi</div>
+      </div>
+    </div>
+
+    <div class="composer">
+      <div class="input">
+        <input id="messageInput" type="text" placeholder="mesaj yaz..." aria-label="Mesaj"/>
+      </div>
+      <button class="btn-send" id="sendBtn" aria-label="Göndər">★</button>
+    </div>
+
+    <div class="floating-note">rounded & minimal dizayn</div>
+  </div>
+
+  <script>
+    const messagesEl = document.getElementById("messages");
+    const inputEl = document.getElementById("messageInput");
+    const sendBtn = document.getElementById("sendBtn");
+
+    function addMessage(text, type){
+      const msg = document.createElement("div");
+      msg.className = "msg " + type;
+      msg.textContent = text;
+      messagesEl.appendChild(msg);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function simulateBotReply(userText){
+      const reply = 'bu cavabdır. yazınız: "' + 
+        (userText.length > 120 ? userText.slice(0,120) + "..." : userText) + '"';
+      setTimeout(() => addMessage(reply,"bot"), 700 + Math.random()*700);
+    }
+
+    function send(){
+      const text = inputEl.value.trim();
+      if (!text) return;
+      addMessage(text,"user");
+      inputEl.value = "";
+      inputEl.focus();
+      simulateBotReply(text);
+    }
+
+    sendBtn.addEventListener("click", send);
+    inputEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") send();
+    });
+  </script>
+</body>
+</html>/
